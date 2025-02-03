@@ -1,6 +1,7 @@
 package pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -43,10 +44,10 @@ public class FormPage {
     @FindBy(xpath = "//div[@role='listbox']//div//div")
     List<WebElement> dtpDates;
 
-    @FindBy(xpath = "//div[@class='subjects-auto-complete__value-container subjects-auto-complete__value-container--is-multi css-1hwfws3']")
+    @FindBy(xpath = "//input[@id='subjectsInput']")
     public WebElement subjectBox;
 
-    @FindBy(xpath = "//div[@id='hobbiesWrapper']//div[@class='col-md-9 col-sm-12']/descendant::input")
+    @FindBy(xpath = "//div[@id='hobbiesWrapper']//div[@class='col-md-9 col-sm-12']/descendant::div")
     public List<WebElement> hobbyCheckboxes;
 
     @FindBy(xpath = "//input[@id='uploadPicture']")
@@ -55,11 +56,15 @@ public class FormPage {
     @FindBy(xpath = "//textarea[@id='currentAddress']")
     public WebElement addressTextbox;
 
-    @FindBy(xpath = "//div[@id='state']//div[contains(@class,'css-1hwfws3')]")
+    @FindBy(xpath = "//div[@id='state']")
     public WebElement stateDropdown;
+    @FindBy(xpath = "//input[@id='react-select-3-input']")
+    public WebElement stateInput;
 
-    @FindBy(xpath = "//div[@id='stateCity-wrapper']//div[3]")
+    @FindBy(xpath = "//div[contains(text(),'Select City')]")
     public WebElement cityDropdown;
+    @FindBy(xpath = "//input[@id='react-select-4-input']")
+    public WebElement cityInput;
 
     @FindBy(xpath = "//button[@id='submit']")
     public WebElement submitBtn;
@@ -112,14 +117,16 @@ public class FormPage {
     }
 
     public void setSubject(String subject){
+        subjectBox.click();
         subjectBox.sendKeys(subject);
+        subjectBox.sendKeys(Keys.ENTER);
     }
 
 
     public void selectHobbyCheckbox(int index){
         for (WebElement radioBtn : hobbyCheckboxes){
             if (!radioBtn.isSelected()){
-                driver.findElement(By.xpath("//div[@id='hobbiesWrapper']//div[@class='col-md-9 col-sm-12']/descendant::input" + "[" + index + "]")).click();
+                driver.findElement(By.xpath("//div[@id='hobbiesWrapper']//div[@class='col-md-9 col-sm-12']/descendant::div" + "[" + index + "]")).click();
                 break;
             }
         }
@@ -133,14 +140,17 @@ public class FormPage {
         addressTextbox.sendKeys(address);
     }
 
-    public void setState(int index){
-        Select select = new Select(stateDropdown);
-        select.selectByIndex(index);
+    public void setState(String state) {
+        stateDropdown.click();
+        stateInput.sendKeys(state);
+        stateInput.sendKeys(Keys.ENTER);
     }
 
-    public void setCity(int index){
-        Select select = new Select(cityDropdown);
-        select.selectByIndex(index);
+
+    public void setCity(String city){
+        cityDropdown.click();
+        cityInput.sendKeys(city);
+        cityInput.sendKeys(Keys.ENTER);
     }
 
     public void clickSubmitBtn(){
@@ -150,6 +160,6 @@ public class FormPage {
     public boolean checkFormSubmissionSuccess(){
         WaitUtils wait = new WaitUtils();
         wait.waitUntilVisible(driver,thankModal, 10);
-        return thankModal.getText().contains("thanks for submit");
+        return thankModal.getText().contains("Thanks");
     }
 }

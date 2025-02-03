@@ -3,8 +3,11 @@ package drivers;
 import org.openqa.selenium.InvalidArgumentException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+
+import java.io.File;
 
 public class DriverManager {
 
@@ -16,6 +19,9 @@ public class DriverManager {
         WebDriver localDriver;
         switch (browser.toLowerCase()) {
             case "chrome":
+                ChromeOptions chromeOptions = new ChromeOptions();
+                File files = new File("\\C:\\Users\\User\\Stands AdBlocker - Chrome Web Store 2.1.36.0.crx");
+                chromeOptions.addExtensions(files);
                 localDriver = new ChromeDriver();
                 break;
             case "edge":
